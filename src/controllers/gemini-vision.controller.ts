@@ -1,7 +1,7 @@
 // GenerativeVisionAIController.ts
 import { Request, Response } from "express";
 import { GenerativeVisionAIModel } from "../models/gemini-vision.model"
-import BaseController from "../helper/baseController";
+import BaseController from "../util/baseController";
 
 export class GenerativeVisionAIController extends BaseController<GenerativeVisionAIModel> {
   protected model: GenerativeVisionAIModel;

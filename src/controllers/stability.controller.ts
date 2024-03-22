@@ -1,5 +1,5 @@
 import { Request, Response } from "express";
-import BaseController from "../helper/baseController";
+import BaseController from "../util/baseController";
 import StabilityModel from "../models/stability.models";
 
 class StabilityController extends BaseController<StabilityModel> {

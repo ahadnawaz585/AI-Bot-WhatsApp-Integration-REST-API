@@ -1,4 +1,4 @@
-import BaseController from '../helper/baseController';
+import BaseController from '../util/baseController';
 import { Request, Response } from 'express';
 import { WhatsAppModel } from '../models/whatsapp.model';
 

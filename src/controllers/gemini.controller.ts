@@ -1,5 +1,5 @@
 import { Request, Response } from "express";
-import BaseController from "../helper/baseController";
+import BaseController from "../util/baseController";
 import { GenerativeAIModel } from "../models/gemini.model";
 
 export class GeminiController extends BaseController<GenerativeAIModel> {
