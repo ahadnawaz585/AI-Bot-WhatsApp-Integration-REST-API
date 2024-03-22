@@ -3,6 +3,7 @@ import { GoogleGenerativeAI } from "@google/generative-ai";
 import { ENV } from "../lib/env";
 import fs from "fs";
 import { answer } from "../types/answer";
+import { Vision } from "../types/vision";
 
 export class GenerativeVisionAIModel {
   private genAI: GoogleGenerativeAI;
@@ -15,7 +16,7 @@ export class GenerativeVisionAIModel {
 
   async generateContent(
     prompt: string,
-    imagePaths: { path: string; mimeType: string }[]
+    imagePaths: Vision[]
   ): Promise<answer> {
     const model = this.genAI.getGenerativeModel({ model: "gemini-pro-vision" });
 
