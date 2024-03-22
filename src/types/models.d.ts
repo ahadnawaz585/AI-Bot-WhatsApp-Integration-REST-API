@@ -1,0 +1,1 @@
+export type Prefix = "!gemini" | "!stability" | "!vision";
