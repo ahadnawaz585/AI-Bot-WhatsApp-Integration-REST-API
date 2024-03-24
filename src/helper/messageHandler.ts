@@ -5,7 +5,7 @@ import { TextHelper } from "../helper/createMessage.helper";
 import { GenerativeVisionAIModel } from "../models/gemini-vision.model";
 import { Vision } from "../types/vision";
 import config from "../config/config";
-import fs from "fs";
+import { ContentHelper } from "./contentHelper.helper";
 
 export class MessageHandler {
   private gemini: GenerativeAIModel;
@@ -28,7 +28,10 @@ export class MessageHandler {
     this.shouldProcessMessages = false;
   }
 
-  public async handleMessage(message: Message, client: Client): Promise<void> {
+  public async handleMessage(
+    message: Message,
+    client: Client
+  ): Promise<void> {
     if (!this.shouldProcessMessages) {
       if (message.body.toLowerCase().includes(this.startMessage)) {
         await this.startMessageProcess(message, client);
@@ -44,7 +47,9 @@ export class MessageHandler {
         return;
       }
 
-      if (this.prefixes.some((prefix) => message.body.startsWith(prefix))) {
+      if (
+        this.prefixes.some((prefix) => message.body.startsWith(prefix))
+      ) {
         await this.processMessages(message, client);
       }
     }
@@ -83,28 +88,38 @@ export class MessageHandler {
     prompt: string,
     model?: string,
     imagePaths?: Vision[]
-  ): Promise<string> {
-    let reply: string;
-    if (model == null || prompt === "") {
-      return "Sorry, I couldn't understand your request.";
+  ): Promise<string | MessageMedia> {
+    let reply: string | MessageMedia;
+
+    const validationError = await ContentHelper.validateRequest(
+      prompt,
+      model,
+      imagePaths
+    );
+
+    if (validationError) {
+      return validationError;
     }
+
     switch (model) {
       case "!gemini":
-        const geminiResponse = await this.gemini.generateContent(prompt);
-        reply = geminiResponse.answer;
+        reply = await ContentHelper.geminiContent(this.gemini, prompt);
         break;
       case "!vision":
-        const visionResponse = await this.vision.generateContent(
+        reply = await ContentHelper.visionContent(
+          this.vision,
           prompt,
-          imagePaths || []
+          imagePaths
         );
-        reply = visionResponse.answer;
         break;
       case "!stability":
-        reply = "Stability model reply";
+        reply = await ContentHelper.stabilityContent(
+          this.stability,
+          prompt
+        );
         break;
       default:
-        reply = "Sorry, I couldn't understand your request.";
+        reply = config.validationMessage;
     }
     return reply;
   }

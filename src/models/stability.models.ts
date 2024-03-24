@@ -1,5 +1,6 @@
 import { generateAsync } from 'stability-client';
 import { ENV } from '../lib/env';
+import { answer } from '../types/answer';
 
 class StabilityModel {
   private apiKey: string;
@@ -8,7 +9,7 @@ class StabilityModel {
     this.apiKey = ENV.stabilityKey || '';
   }
 
-  async generateImage(prompt: string): Promise<string> {
+  async generateImage(prompt: string): Promise<answer> {
     const res: any = await generateAsync({
       prompt,
       apiKey: this.apiKey,
@@ -20,8 +21,8 @@ class StabilityModel {
 
     const res_img = res.images[0];
     const buffer = Buffer.from(res_img.buffer, 'hex');
-    const base64String = buffer.toString('base64');
-    return base64String;
+    const answer = buffer.toString('base64');
+    return {answer};
   }
 }
 
