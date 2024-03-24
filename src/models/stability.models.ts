@@ -16,7 +16,7 @@ class StabilityModel {
       engine: 'stable-diffusion-512-v2-1',
       width: 512,
       height: 512,
-      noStore: false,
+      noStore: true,
     });
 
     const res_img = res.images[0];
