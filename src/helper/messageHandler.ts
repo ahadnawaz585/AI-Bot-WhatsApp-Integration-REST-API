@@ -6,6 +6,7 @@ import { GenerativeVisionAIModel } from "../models/gemini-vision.model";
 import { Vision } from "../types/vision";
 import config from "../config/config";
 import { ContentHelper } from "./contentHelper.helper";
+import { response } from "express";
 
 export class MessageHandler {
   private gemini: GenerativeAIModel;
@@ -28,10 +29,7 @@ export class MessageHandler {
     this.shouldProcessMessages = false;
   }
 
-  public async handleMessage(
-    message: Message,
-    client: Client
-  ): Promise<void> {
+  public async handleMessage(message: Message, client: Client): Promise<void> {
     if (!this.shouldProcessMessages) {
       if (message.body.toLowerCase().includes(this.startMessage)) {
         await this.startMessageProcess(message, client);
@@ -47,9 +45,7 @@ export class MessageHandler {
         return;
       }
 
-      if (
-        this.prefixes.some((prefix) => message.body.startsWith(prefix))
-      ) {
+      if (this.prefixes.some((prefix) => message.body.startsWith(prefix))) {
         await this.processMessages(message, client);
       }
     }
@@ -113,10 +109,7 @@ export class MessageHandler {
         );
         break;
       case "!stability":
-        reply = await ContentHelper.stabilityContent(
-          this.stability,
-          prompt
-        );
+        reply = await ContentHelper.stabilityContent(this.stability, prompt);
         break;
       default:
         reply = config.validationMessage;

@@ -21,7 +21,7 @@ export class TextHelper {
     });
 
     if (model === null) prompt = "";
-
+    console.log(model,prompt);
     return { prompt, model };
   }
 
