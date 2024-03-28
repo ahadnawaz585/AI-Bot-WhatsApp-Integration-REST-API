@@ -6,7 +6,7 @@ import { GenerativeVisionAIModel } from "../models/gemini-vision.model";
 import { Vision } from "../types/vision";
 import config from "../config/config";
 import { ContentHelper } from "./contentHelper.helper";
-import { response } from "express";
+import { pdfData } from "../types/pdf";
 
 export class MessageHandler {
   private gemini: GenerativeAIModel;
@@ -110,6 +110,20 @@ export class MessageHandler {
         break;
       case "!stability":
         reply = await ContentHelper.stabilityContent(this.stability, prompt);
+        break;
+      case "!topicPDF":
+        const data = await ContentHelper.outlineContentGeneration(
+          this.gemini,
+          prompt
+        );
+        reply = await this.textHelper.topicPDF(data, prompt);
+        break;
+      case "!makePDF":
+        reply = await this.textHelper.makePDF(prompt);
+        break;
+      case "!promptPDF":
+        const response = await ContentHelper.geminiContent(this.gemini, prompt);
+        reply = await this.textHelper.makePDF(response);
         break;
       default:
         reply = config.validationMessage;

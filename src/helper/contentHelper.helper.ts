@@ -3,16 +3,22 @@ import StabilityModel from "../models/stability.models";
 import { GenerativeVisionAIModel } from "../models/gemini-vision.model";
 import { Vision } from "../types/vision";
 import { MessageMedia } from "whatsapp-web.js";
+import { TextHelper } from "../helper/createMessage.helper";
 import config from "../config/config";
+import { pdfData } from "../types/pdf";
 
 export class ContentHelper {
+  static textHelper: TextHelper = new TextHelper();
+
+  constructor() {}
+
   private static async handleContentGeneration<T>(
     promise: Promise<T>
   ): Promise<T | string> {
     try {
       return await promise;
     } catch (error) {
-      console.error(error);
+      console.log(error);
       return config.serverError;
     }
   }
@@ -61,4 +67,24 @@ export class ContentHelper {
         .then((response) => new MessageMedia("image/png", response.answer))
     );
   }
+
+  public static async outlineContentGeneration(
+    gemini: GenerativeAIModel,
+    prompt: string
+  ): Promise<pdfData> {
+    let headings = '';
+    let data = '';
+    try {
+      const heading = await this.textHelper.outline(prompt);
+      headings = await ContentHelper.geminiContent(gemini, heading);
+      const response = await this.textHelper.content(headings);
+      data = await ContentHelper.geminiContent(gemini, response);
+      return {headings , data};
+    } catch (error) {
+      console.log(error);
+      return {headings , data};
+    }
+  }
+  
+
 }

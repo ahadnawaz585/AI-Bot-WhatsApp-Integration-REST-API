@@ -11,11 +11,17 @@ Simply begin your inquiry with one of the magic words:
 - "!gemini" for text-based assistance
 - "!stability" for image generation with text prompts
 - "!vision" for image-based assistance
+- "!makePDF" to convert text to PDF
+- "!topicPDF" to generate an assignment on a topic
+- "!promptPDF" to make a PDF of the answer to a question
 
 Example:
 !gemini What is acrobat ?
 !vision what is this ? (with attached photos)
 !stability Generate an image of a cat
+!makePDF This is the text to convert to PDF.
+!topicPDF Biology
+!promptPDF What is the capital of France?
 
 Whether you're seeking information, guidance, or just a friendly chat, I'm at your service! Remember, your satisfaction is my top priority, and I'm here to ensure that every interaction leaves you feeling empowered and supported.
 
@@ -27,7 +33,7 @@ Your trusty AI assistant, crafted with love by Ahad. ❤️`, // The welcome mes
     "Sorry, I couldn't understand your request. Please try again 🙂", // The message displayed when the user's request is not understood
   serverError:
     "An unexpected error occurred while processing your request! Please try again later or contact support for assistance. 🛠️", // The message displayed when an unexpected server error occurs
-  prefixes: ["!gemini", "!stability", "!vision"], // The prefixes used to identify different types of requests
+  prefixes: ["!gemini", "!stability", "!vision", "!makePDF", "!topicPDF", "!promptPDF"], // The prefixes used to identify different types of requests
 };
 
 export default config;
