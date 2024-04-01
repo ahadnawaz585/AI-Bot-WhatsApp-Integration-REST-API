@@ -33,7 +33,7 @@ Your trusty AI assistant, crafted with love by Ahad. ❤️`, // The welcome mes
     "Sorry, I couldn't understand your request. Please try again 🙂", // The message displayed when the user's request is not understood
   serverError:
     "An unexpected error occurred while processing your request! Please try again later or contact support for assistance. 🛠️", // The message displayed when an unexpected server error occurs
-  prefixes: ["!gemini", "!stability", "!vision", "!makePDF", "!topicPDF", "!promptPDF"], // The prefixes used to identify different types of requests
+  prefixes: ["!gemini", "!stability", "!vision", "!makePDF", "!topicPDF", "!promptPDF","!imagePDF"], // The prefixes used to identify different types of requests
 };
 
 export default config;

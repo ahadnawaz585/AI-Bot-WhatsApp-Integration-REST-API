@@ -1,1 +1,1 @@
-export type Prefix = "!gemini" | "!stability" | "!vision"| "!makePDF"|"!topicPDF"|"!promptPDF";
+export type Prefix = "!gemini" | "!stability" | "!vision"| "!makePDF"|"!topicPDF"|"!promptPDF"|"!imagePDF";

@@ -1,7 +1,9 @@
 import pdfMake from "pdfmake/build/pdfmake";
 import pdfFonts from "pdfmake/build/vfs_fonts";
-import { TDocumentDefinitions } from "pdfmake/interfaces";
+import { ContentImage, TDocumentDefinitions } from "pdfmake/interfaces";
 import { PdfHelper } from "../helper/pdf.helper";
+
+import { MessageMedia } from "whatsapp-web.js";
 
 pdfMake.vfs = pdfFonts.pdfMake.vfs;
 
@@ -57,5 +59,37 @@ export class pdfUtility {
     return pdfDoc;
   }
 
+  static async makeImagePDF(images: MessageMedia[]): Promise<Buffer> {
+    try {
+      const imageContent: ContentImage[] = [];
 
+      for (const image of images) {
+        const base64Data = `data:${image.mimetype};base64,${image.data}`;
+        imageContent.push({ image: base64Data, width: 500 });
+      }
+
+      const documentDefinition: TDocumentDefinitions = {
+        content: imageContent,
+      };
+
+      const pdfDoc = pdfMake.createPdf(documentDefinition);
+
+      return await this.getPdfBuffer(pdfDoc);
+    } catch (error) {
+      console.error("Error generating image PDF:", error);
+      throw error;
+    }
+  }
+
+  private static async getPdfBuffer(pdf: any): Promise<Buffer> {
+    return new Promise((resolve, reject) => {
+      try {
+        pdf.getBuffer((buffer: Buffer) => {
+          resolve(buffer);
+        });
+      } catch (error) {
+        reject(error);
+      }
+    });
+  }
 }

@@ -6,7 +6,6 @@ import { GenerativeVisionAIModel } from "../models/gemini-vision.model";
 import { Vision } from "../types/vision";
 import config from "../config/config";
 import { ContentHelper } from "./contentHelper.helper";
-import { pdfData } from "../types/pdf";
 
 export class MessageHandler {
   private gemini: GenerativeAIModel;
@@ -70,17 +69,28 @@ export class MessageHandler {
   private async processMessages(
     message: Message,
     client: Client
-  ): Promise<void> {
+): Promise<void> {
     const text = this.textHelper.removeData(message.body);
     const prompt = text.prompt || "";
     const model = text.model || "";
     const imagePaths = await this.textHelper.handleMedia(message);
-    const reply = await this.reply(prompt, model, imagePaths);
+    const reply = await this.reply(prompt, model, imagePaths || []);
     await client.sendMessage(message.from, reply);
-    this.textHelper.deleteTemporaryImageFiles(imagePaths);
-  }
+    if (imagePaths) {
+        this.textHelper.deleteTemporaryImageFiles(imagePaths);
+    }
+}
 
-  private async reply(
+private async getNextMessage(client: Client): Promise<Message | null> {
+  return new Promise((resolve) => {
+      client.on('message_create', (msg) => {
+          resolve(msg);
+      });
+  });
+}
+
+
+private async reply(
     prompt: string,
     model?: string,
     imagePaths?: Vision[]
@@ -125,9 +135,14 @@ export class MessageHandler {
         const response = await ContentHelper.geminiContent(this.gemini, prompt);
         reply = await this.textHelper.makePDF(response);
         break;
+      case "!imagePDF":
+        reply = await this.textHelper.makeImagePDF(imagePaths);
+        break;
+
       default:
         reply = config.validationMessage;
     }
     return reply;
   }
+
 }

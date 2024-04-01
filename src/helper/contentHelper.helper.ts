@@ -28,13 +28,16 @@ export class ContentHelper {
     model?: string,
     imagePaths?: Vision[]
   ): Promise<string | undefined> {
-    if (model == null || prompt === "") {
+    if (model == null) {
       return "Sorry, I couldn't understand your request.";
     }
-    if (model === "!vision" && (!imagePaths || imagePaths.length === 0)) {
-      return "Sorry, I couldn't understand your request.";
+    if (model === "!vision" || model === "!imagePDF") {
+      if (!imagePaths || imagePaths.length === 0) {
+        return "Sorry, I couldn't understand your request.";
+      }
     }
-  }
+}
+
 
   public static async geminiContent(
     gemini: GenerativeAIModel,

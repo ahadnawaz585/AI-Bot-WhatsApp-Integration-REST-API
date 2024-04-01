@@ -9,7 +9,15 @@ import config from "../config/config";
 import { pdfData } from "../types/pdf";
 
 export class TextHelper {
-  private dataToRemove: Prefix[] = ["!gemini", "!vision", "!stability", "!makePDF","!topicPDF","!promptPDF"];
+  private dataToRemove: Prefix[] = [
+    "!gemini",
+    "!vision",
+    "!stability",
+    "!makePDF",
+    "!topicPDF",
+    "!promptPDF",
+    "!imagePDF",
+  ];
 
   public removeData(text: string): Prompt {
     let prompt = text;
@@ -25,7 +33,8 @@ export class TextHelper {
     });
 
     if (model === null) prompt = "";
-    console.log(model, prompt);
+    if (model === "!imagePDF" && prompt==""||null) prompt = "convert";
+    console.log(model, ":", prompt);
     return { prompt, model };
   }
 
@@ -41,42 +50,43 @@ export class TextHelper {
 
   async handleMedia(
     message: Message
-  ): Promise<{ path: string; mimeType: string }[]> {
-    let imagePaths: { path: string; mimeType: string }[] = [];
+): Promise<Vision[] | undefined> {
+    let imagePaths: Vision[] = [];
 
     try {
-      const media = await message.downloadMedia();
-      if (media) {
-        if (Array.isArray(media)) {
-          for (let i = 0; i < media.length; i++) {
-            const attachment = media[i];
-            if (
-              attachment &&
-              attachment.mimetype &&
-              attachment.mimetype.startsWith("image")
-            ) {
-              const filename = `${i}.${attachment.mimetype.split("/")[1]}`;
-              fs.writeFileSync(filename, attachment.data, "base64");
-              imagePaths.push({
-                path: filename,
-                mimeType: attachment.mimetype,
-              });
+        const media = await message.downloadMedia();
+        if (media) {
+            if (Array.isArray(media)) {
+                for (let i = 0; i < media.length; i++) {
+                    const attachment = media[i];
+                    if (
+                        attachment &&
+                        attachment.mimetype &&
+                        attachment.mimetype.startsWith("image")
+                    ) {
+                        const filename = `${i}.${attachment.mimetype.split("/")[1]}`;
+                        fs.writeFileSync(filename, attachment.data, "base64");
+                        imagePaths.push({
+                            path: filename,
+                            mimeType: attachment.mimetype,
+                        });
+                    }
+                }
+            } else {
+                if (media.mimetype && media.mimetype.startsWith("image")) {
+                    const filename = `0.${media.mimetype.split("/")[1]}`;
+                    fs.writeFileSync(filename, media.data, "base64");
+                    imagePaths.push({ path: filename, mimeType: media.mimetype });
+                }
             }
-          }
-        } else {
-          if (media.mimetype && media.mimetype.startsWith("image")) {
-            const filename = `0.${media.mimetype.split("/")[1]}`;
-            fs.writeFileSync(filename, media.data, "base64");
-            imagePaths.push({ path: filename, mimeType: media.mimetype });
-          }
         }
-      }
     } catch (error) {
-      console.log("Error downloading media:", error);
+        console.log("Error downloading media:", error);
     }
 
-    return imagePaths;
-  }
+    return imagePaths.length > 0 ? imagePaths : undefined; 
+}
+
 
   public outline(topic: string): string {
     let headings: string = "";
@@ -84,9 +94,9 @@ export class TextHelper {
       headings = `Give me 15-20 headings for ${topic}`;
       return headings;
     } catch (error) {
-      console.log("Error creating topc prompts:", error);
+      console.log("Error creating topic prompts:", error);
+      return "";
     }
-    return headings;
   }
 
   public content(outline: string): string {
@@ -96,34 +106,36 @@ export class TextHelper {
       return content;
     } catch (error) {
       console.log("Error creating topic prompts:", error);
+      return "";
     }
-    return content;
   }
 
-  public async topicPDF(data: pdfData, prompt: string): Promise<string | MessageMedia> {
+  public async topicPDF(
+    data: pdfData,
+    prompt: string
+  ): Promise<string | MessageMedia> {
     const topic = prompt;
     const outline = data.headings;
     const content = data.data;
-  
+
     try {
       const pdf = pdfUtility.makeAssignment(topic, outline, content);
       const pdfBuffer = await this.getPdfBuffer(pdf);
 
       const filename = `${topic.trim().replace(/\s+/g, "_").toLowerCase()}.pdf`;
-  
+
       const response = new MessageMedia(
         "application/pdf",
         pdfBuffer.toString("base64"),
-        filename 
+        filename
       );
-  
+
       return response;
     } catch (error) {
       console.log(error);
       return config.serverError;
     }
   }
-  
 
   private async getPdfBuffer(pdf: any): Promise<Buffer> {
     return new Promise((resolve, reject) => {
@@ -137,22 +149,46 @@ export class TextHelper {
     });
   }
 
-  public async makePDF(data:string): Promise<string | MessageMedia> {
+  public async makePDF(data: string): Promise<string | MessageMedia> {
     try {
       const pdf = pdfUtility.makePDF(data);
       const pdfBuffer = await this.getPdfBuffer(pdf);
 
       const filename = `message.pdf`;
-  
+
       const response = new MessageMedia(
         "application/pdf",
         pdfBuffer.toString("base64"),
-        filename 
+        filename
       );
-  
+
       return response;
     } catch (error) {
       console.log(error);
+      return config.serverError;
+    }
+  }
+
+  public async makeImagePDF(images?: Vision[]): Promise<string | MessageMedia> {
+    try {
+      const messageMediaArray: MessageMedia[] = (images || []).map((image) => {
+        const imageData = fs.readFileSync(image.path).toString("base64");
+        return new MessageMedia(image.mimeType, imageData);
+      });
+
+      const pdfBuffer = await pdfUtility.makeImagePDF(messageMediaArray);
+
+      const filename = `images.pdf`;
+
+      const response = new MessageMedia(
+        "application/pdf",
+        pdfBuffer.toString("base64"),
+        filename
+      );
+
+      return response;
+    } catch (error) {
+      console.log("Error generating image PDF:", error);
       return config.serverError;
     }
   }
