@@ -23,7 +23,7 @@ export class WhatsAppModel {
             this.qrEmitter.emit('qrGenerated', qrCode);
             console.log('Scan the QR code above to login to WhatsApp.');
         });
-
+        
         this.client.on('message_create', this.handleMessage.bind(this));
     }
 

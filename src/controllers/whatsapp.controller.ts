@@ -20,8 +20,6 @@ export class WhatsAppController extends BaseController<WhatsAppModel> {
   }
 
   async getQRCode(req: Request, res: Response) {
-    console.log("in controller");
-
     const operation = () => this.model.getQRCode();
     const successMessage = 'QR generated successfully!';
     const errorMessage = 'Error generating QR code';
