@@ -7,15 +7,17 @@ export class WhatsAppModel {
     private client: Client;
     private messageHandler: MessageHandler;
     private qrEmitter: EventEmitter;
-    private wwebVersion = '1.23.0';
+
     constructor() {
+
+        const wwebVersion = '2.2407.3';
         this.client = new Client({
             puppeteer: {
                 args: ['--no-sandbox'],
             },
             webVersionCache: {
                 type: 'remote',
-                remotePath: `https://raw.githubusercontent.com/wppconnect-team/wa-version/main/html/${this.wwebVersion}.html`,
+                remotePath: `https://raw.githubusercontent.com/wppconnect-team/wa-version/main/html/${wwebVersion}.html`,
             },
         });
 
@@ -27,7 +29,7 @@ export class WhatsAppModel {
             this.qrEmitter.emit('qrGenerated', qrCode);
             console.log('Scan the QR code above to login to WhatsApp.');
         });
-        
+          
         this.client.on('message_create', this.handleMessage.bind(this));
     }
 
