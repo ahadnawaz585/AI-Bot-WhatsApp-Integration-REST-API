@@ -7,11 +7,15 @@ export class WhatsAppModel {
     private client: Client;
     private messageHandler: MessageHandler;
     private qrEmitter: EventEmitter;
-
+    private wwebVersion = '1.23.0';
     constructor() {
         this.client = new Client({
             puppeteer: {
                 args: ['--no-sandbox'],
+            },
+            webVersionCache: {
+                type: 'remote',
+                remotePath: `https://raw.githubusercontent.com/wppconnect-team/wa-version/main/html/${this.wwebVersion}.html`,
             },
         });
 
