@@ -14,6 +14,7 @@ Simply begin your inquiry with one of the magic words:
 - "!makePDF" to convert text to PDF
 - "!topicPDF" to generate an assignment on a topic
 - "!promptPDF" to make a PDF of the answer to a question
+- "!imagePDF" to make a pdf of images
 
 Example:
 !gemini What is acrobat ?
@@ -22,6 +23,7 @@ Example:
 !makePDF This is the text to convert to PDF.
 !topicPDF Biology
 !promptPDF What is the capital of France?
+!imagePDF (with attached photos)
 
 Whether you're seeking information, guidance, or just a friendly chat, I'm at your service! Remember, your satisfaction is my top priority, and I'm here to ensure that every interaction leaves you feeling empowered and supported.
 

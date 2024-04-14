@@ -22,7 +22,15 @@ To get started with this project, follow these steps:
 
 3. Set up environment variables:
    - Rename `.env.example` to `.env`.
-   - Generate an API key from the Gemini website and add it to the `.env` file.
+   - Generate an API key from the [Gemini](https://gemini.google.com/app)  and [Stability](https://stability.ai/news/api-platform-for-stability-ai) website and add it to the `.env` file.
+  
+   - ```dotenv
+     # Gemini API Key
+     GEMINI_API_KEY=your_gemini_api_key_here
+
+     # Stability API Key
+     STABILITY_API_KEY=your_stability_api_key_here
+     ```
 
 ## Usage
 
