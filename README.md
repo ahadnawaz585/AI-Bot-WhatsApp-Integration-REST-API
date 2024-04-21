@@ -45,7 +45,6 @@ npm run start
 For a detailed code overview, watch my other video here.
 
 [![Code Explained ](https://img.youtube.com/vi/kpZ0Q1UfMaM/0.jpg)](https://www.youtube.com/watch?v=kpZ0Q1UfMaM&t=0s)
-<iframe width="560" height="315" src="https://www.youtube.com/embed/kpZ0Q1UfMaM" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
 
 
 ### 🎥 Full Video: YouTube
