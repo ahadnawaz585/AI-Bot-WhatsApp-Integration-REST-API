@@ -41,6 +41,16 @@ To start the server, run the following command:
 npm run start
 ```
 
+### 📉 Code Explained:
+For a detailed code overview, watch my other video here.
+
+[![Code Explained ](https://img.youtube.com/vi/kpZ0Q1UfMaM/0.jpg)](https://www.youtube.com/watch?v=kpZ0Q1UfMaM&t=0s)
+
+
+### 🎥 Full Video: YouTube
+
+[![DEMO](https://img.youtube.com/vi/OPmqsgDdOaY/0.jpg)](https://youtu.be/OPmqsgDdOaY?si=_eAGl3ISx5XjQSzY)
+
 ### Chatbot Functionality
 
 - This project operates as a chatbot integrated with WhatsApp.
