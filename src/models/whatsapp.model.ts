@@ -9,7 +9,7 @@ export class WhatsAppModel {
     private qrEmitter: EventEmitter;
 
     constructor() {
-
+        // const wwebVersion = '2.2407.3';
         const wwebVersion = '2.2409.0';
         this.client = new Client({
             puppeteer: {
