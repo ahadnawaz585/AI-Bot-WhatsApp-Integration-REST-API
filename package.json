@@ -18,7 +18,7 @@
     "dotenv": "^16.4.5",
     "pdfreader": "^3.0.2",
     "qrcode-terminal": "^0.12.0",
-    "whatsapp-web.js": "^1.23.0",
+    "whatsapp-web.js": "github:pedroslopez/whatsapp-web.js#webpack-exodus",
     "word-extractor": "^1.0.4"
   },
   "devDependencies": {

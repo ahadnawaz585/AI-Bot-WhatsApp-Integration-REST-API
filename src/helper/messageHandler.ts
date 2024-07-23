@@ -70,9 +70,9 @@ export class MessageHandler {
     message: Message,
     client: Client
 ): Promise<void> {
-    const text = this.textHelper.removeData(message.body);
-    const prompt = text.prompt || "";
-    const model = text.model || "";
+    const text = this.textHelper.removeData(message.body); //!gemini how to do this 
+    const prompt = text.prompt || "";// how to do this 
+    const model = text.model || ""; // !gemini
     const imagePaths = await this.textHelper.handleMedia(message);
     const reply = await this.reply(prompt, model, imagePaths || []);
     await client.sendMessage(message.from, reply);
