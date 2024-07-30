@@ -14,11 +14,10 @@ export class GenerativeVisionAIModel {
     this.genAI = new GoogleGenerativeAI(this.apiKey);
   }
 
-  async generateContent(
-    prompt: string,
-    imagePaths: Vision[]
-  ): Promise<answer> {
-    const model = this.genAI.getGenerativeModel({ model: "gemini-pro-vision" });
+  async generateContent(prompt: string, imagePaths: Vision[]): Promise<answer> {
+    const model = this.genAI.getGenerativeModel({
+      model: "gemini-1.5-pro"
+   });
 
     const imageParts = imagePaths.map(({ path, mimeType }) =>
       fileToGenerativePart(path, mimeType)
@@ -39,5 +38,3 @@ function fileToGenerativePart(path: string, mimeType: string) {
     },
   };
 }
-
-
