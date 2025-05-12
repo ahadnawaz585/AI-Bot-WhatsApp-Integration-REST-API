@@ -10,6 +10,8 @@ export class WhatsAppModel {
 
     constructor() {
         // const wwebVersion = '2.2407.3';
+        // 2.2346.52
+        // const wwebVersion = '2.2346.52';
         const wwebVersion = '2.2409.0';
         this.client = new Client({
             puppeteer: {

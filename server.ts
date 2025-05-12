@@ -56,7 +56,7 @@ class App {
   }
 
   private startServer(): void {
-    let port = process.env.PORT || 3001;
+    let port = process.env.PORT || 3002;
     this.app.listen(port, () => {
       console.log(`Server is running on port ${port}`);
     });
